@@ -1,23 +1,29 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const ReactRouter = require('react-router')
-const {Router, Route, IndexRoute, hashHistory} = ReactRouter
+
+import { DefaultRoute, Link, Route, RouteHandler,Router,hashHistory,IndexRoute, browserHistory } from 'react-router';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 const Main = require('./components/Main')
+const Home = require('./components/Home')
+const Listing = require('./components/Listing')
 
 
-const App = React.createClass({
-
-  render(){
-    return(
-    <Router history={hashHistory}>
-    <Route path='/' component={Main}>
-    <IndexRoute component={Home}/>
-    <Route path='/men' component={Listing}/>
-    </Route>
+function run() {
+  ReactDOM.render((
+    <Router history={browserHistory} >
+    <Route path='/' component={Main}/>
+    <Route path='/Listing'component={Listing}/>
+    <Route path='/Main' component={Main}/>
     </Router>
-    )
-  }
-})
+    ), document.getElementById('app'));
+}
 
-ReactDOM.render(<App />, document.getElementById('app'))
+const loadedStates = ['complete', 'loaded', 'interactive'];
+
+if (loadedStates.includes(document.readyState) && document.body) {
+  run();
+} else {
+  window.addEventListener('DOMContentLoaded', run, false);
+}
+
 
