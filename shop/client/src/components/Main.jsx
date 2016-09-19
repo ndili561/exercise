@@ -10,8 +10,7 @@ var Main = React.createClass({
   return(
   <div className="Welcome">
     OnLine Shop
-    <Link className='home' to='/Listing'>Enter Shop</Link>
-   
+    <Link className='home' to='/listing'>Enter Shop</Link>
   </div>
   )
 }

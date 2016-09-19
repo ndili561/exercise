@@ -3,7 +3,6 @@ const React = require('react')
 const Router = require('react-router')
 const { Link, browserHistory } = Router
 var ShoppingBasket = require('react-icons/lib/md/add-shopping-cart');
-var Basket = require('./Basket')
 
 var Items = React.createClass({
  
@@ -21,13 +20,14 @@ var Items = React.createClass({
  },
 
  handleState: function(){
-  
+  this.props.addToBasket(this.state.items)
  },
 
 
 render:function(){
 
   return(
+ 
   <div className="container">
   <div className='box'>
    <img src={`images/${this.props.img}`} className='show-image' />
@@ -37,9 +37,8 @@ render:function(){
    </div>
    </div>
 
-  
 
-  
+ 
  )
 
 

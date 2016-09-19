@@ -65,10 +65,10 @@
 	function run() {
 	  _reactDom2.default.render(_react2.default.createElement(
 	    _reactRouter.Router,
-	    { history: _reactRouter.browserHistory },
+	    { history: _reactRouter.hashHistory },
 	    _react2.default.createElement(_reactRouter.Route, { path: '/', component: Main }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/Listing', component: Listing }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/Main', component: Main })
+	    _react2.default.createElement(_reactRouter.Route, { path: '/listing', component: Listing }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/main', component: Main })
 	  ), document.getElementById('app'));
 	}
 	
@@ -25391,7 +25391,7 @@
 	      'OnLine Shop',
 	      React.createElement(
 	        Link,
-	        { className: 'home', to: '/Listing' },
+	        { className: 'home', to: '/listing' },
 	        'Enter Shop'
 	      )
 	    );
@@ -25444,11 +25444,12 @@
 	var Link = Router.Link;
 	
 	var Items = __webpack_require__(227);
+	var Basket = __webpack_require__(228);
 	
 	var Listing = React.createClass({
 	  displayName: 'Listing',
 	  getInitialState: function getInitialState() {
-	    return { searchQuery: '', items: [], basket: [] };
+	    return { searchQuery: '', items: [], basket: [{ description: null, price: 0, id: null }] };
 	  },
 	
 	
@@ -25471,6 +25472,13 @@
 	    request.send(null);
 	  },
 	
+	  addToBasket: function addToBasket(props) {
+	    var item = [];
+	    item = this.state.basket;
+	    item.push(props);
+	    this.setState({ basket: item });
+	  },
+	
 	  render: function render() {
 	    var _this2 = this;
 	
@@ -25488,7 +25496,7 @@
 	            null,
 	            React.createElement(
 	              Link,
-	              { className: 'home', to: '/Main' },
+	              { className: 'home', to: '/main' },
 	              'Home'
 	            )
 	          ),
@@ -25511,6 +25519,12 @@
 	      ),
 	      React.createElement(
 	        'div',
+	        { className: 'basket' },
+	        'Your cart',
+	        React.createElement(Basket, { className: 'if', basket: this.state.basket })
+	      ),
+	      React.createElement(
+	        'div',
 	        { className: 'list' },
 	        React.createElement('input', { className: 'search-box', type: 'text', placeholder: 'Search...', value: this.state.searchQuery, onChange: this.doSearch }),
 	        React.createElement(
@@ -25519,7 +25533,7 @@
 	          this.state.items.filter(function (item) {
 	            return (item.description + ' ' + item.img).toUpperCase().indexOf(_this2.state.searchQuery.toUpperCase()) >= 0;
 	          }).map(function (item) {
-	            return React.createElement(Items, _extends({}, item, { key: item.id, addToBasket: _this2.addToBasket }));
+	            return React.createElement(Items, _extends({}, item, { addToBasket: _this2.addToBasket }));
 	          })
 	        )
 	      )
@@ -25653,7 +25667,6 @@
 	var browserHistory = Router.browserHistory;
 	
 	var ShoppingBasket = __webpack_require__(225);
-	var Basket = __webpack_require__(228);
 	
 	var Items = React.createClass({
 	  displayName: 'Items',
@@ -25669,7 +25682,9 @@
 	    });
 	  },
 	
-	  handleState: function handleState() {},
+	  handleState: function handleState() {
+	    this.props.addToBasket(this.state.items);
+	  },
 	
 	  render: function render() {
 	
@@ -25713,29 +25728,58 @@
 	'use strict';
 	
 	var React = __webpack_require__(3);
-	var Router = __webpack_require__(1);
-	var Link = Router.Link;
-	var browserHistory = Router.browserHistory;
-	
+	var Listing = __webpack_require__(224);
+	var BasketItem = __webpack_require__(229);
 	
 	var Basket = React.createClass({
 	  displayName: 'Basket',
 	
 	
 	  render: function render() {
-	    if (!this.props & this.props.length > 1) {
-	      return;
-	    }
-	    console.log(this.props);
+	    console.log(this.props.basket);
+	    if (!this.props.basket) return;
+	    var basketItem = this.props.basket.map(function (item) {
+	      return React.createElement(BasketItem, { description: item.description, key: item.id, price: item.price });
+	    });
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'basket' },
-	      this.props.description
+	      basketItem
 	    );
 	  }
 	});
 	
 	module.exports = Basket;
+
+/***/ },
+/* 229 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(3);
+	
+	var BasketItem = React.createClass({
+	  displayName: "BasketItem",
+	
+	
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      { className: "description" },
+	      React.createElement(
+	        "h4",
+	        { className: "item" },
+	        this.props.description,
+	        this.props.price
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = BasketItem;
 
 /***/ }
 /******/ ]);

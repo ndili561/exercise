@@ -10,10 +10,10 @@ const Listing = require('./components/Listing')
 
 function run() {
   ReactDOM.render((
-    <Router history={browserHistory} >
-    <Route path='/' component={Main}/>
-    <Route path='/Listing'component={Listing}/>
-    <Route path='/Main' component={Main}/>
+    <Router history={hashHistory} >
+      <Route path='/' component={Main}/>
+      <Route path='/listing'component={Listing}/>
+      <Route path='/main' component={Main}/>
     </Router>
     ), document.getElementById('app'));
 }
