@@ -9,7 +9,6 @@ var Main = React.createClass({
   render: function(){
   return(
   <div className="Welcome">
-    OnLine Shop
     <Link className='home' to='/listing'>Enter Shop</Link>
   </div>
   )

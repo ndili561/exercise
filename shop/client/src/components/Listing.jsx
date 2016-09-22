@@ -4,17 +4,14 @@ const Router = require('react-router')
 const { Route, IndexRoute, hashHistory, Link} = Router
 const Items = require('./Items')
 const Basket = require('./Basket')
-
-
-
-
+const CheckOut = require('./CheckOut')
 
 
 const Listing = React.createClass({
 
  
   getInitialState(){
-    return{searchQuery:'',items:[], basket:[{description:null,price:0, id:null}]}
+    return{searchQuery:'',items:[], basket:[{description:null,price:null, id:null}]}
   },
 
 
@@ -39,10 +36,13 @@ const Listing = React.createClass({
 
   addToBasket: function(props){
     var item=[]
-    item=this.state.basket
-    item.push(props)
-   this.setState({basket: item})
+    this.state.item=this.state.basket
+    this.state.item.push(props)
+   this.setState({basket: this.state.item})
+   console.log(this.state.basket)
+   localStorage.setItem('basket', JSON.stringify(this.state.basket));
   },
+
 
   render(){
     return(
@@ -50,35 +50,38 @@ const Listing = React.createClass({
       <nav>
         <ul>
           <li><Link className="home" to='/main'>Home</Link></li>
-          <li className="active">About</li>
-          <li>Shopping Basket</li>
-          <li>Contact</li>
+          <li><Link className="active" to='/home'>About</Link></li>
+          <li><Link className="shooo" to='/checkout'>Shopping Basket</Link></li>
         </ul>
       </nav>
 
-      <div className="basket">Your cart{
-        <Basket className="if" basket={this.state.basket}/>
+      <div className="basket">{
+        <Basket className="basket" basket={this.state.basket}>
+        </Basket>
       }
       </div>
+
+      <div className="basket">{
+        <CheckOut className="basket" basket={this.state.basket}>
+        {
+          console.log(this.state.basket)
+        }
+        </CheckOut>
       
-
-
-      <div className="list">
-          <input className='search-box' type='text' placeholder='Search...' value={this.state.searchQuery} onChange={this.doSearch} />
+      }
+      </div>
      
       <div className='shows-container'>
         {
           this.state.items.filter((item) => `${item.description} ${item.img}`.toUpperCase().indexOf(this.state.searchQuery.toUpperCase()) >= 0)
            .map((item) => (
-            <Items { ...item } addToBasket={this.addToBasket}/>
+            <Items { ...item } key={item.id} addToBasket={this.addToBasket}/>
 
           ))
 
         }
       </div>
       </div>
-      </div>
-    
        
   )
   }

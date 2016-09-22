@@ -4,11 +4,12 @@ var React = require('react')
 var BasketItem = React.createClass({
 
 
+
   render: function(){
     return (
-     <div className="description">
-     <h4 className="item">
+     <div className="descr">
      {this.props.description}
+     <h4 className="it">
      {this.props.price}
      </h4>
      </div>

@@ -61,6 +61,7 @@
 	var Main = __webpack_require__(222);
 	var Home = __webpack_require__(223);
 	var Listing = __webpack_require__(224);
+	var CheckOut = __webpack_require__(230);
 	
 	function run() {
 	  _reactDom2.default.render(_react2.default.createElement(
@@ -68,7 +69,9 @@
 	    { history: _reactRouter.hashHistory },
 	    _react2.default.createElement(_reactRouter.Route, { path: '/', component: Main }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/listing', component: Listing }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/main', component: Main })
+	    _react2.default.createElement(_reactRouter.Route, { path: '/main', component: Main }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/home', component: Home }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/checkout', component: CheckOut })
 	  ), document.getElementById('app'));
 	}
 	
@@ -25388,7 +25391,6 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'Welcome' },
-	      'OnLine Shop',
 	      React.createElement(
 	        Link,
 	        { className: 'home', to: '/listing' },
@@ -25407,23 +25409,27 @@
 	'use strict';
 	
 	var React = __webpack_require__(3);
+	var Router = __webpack_require__(1);
+	var Route = Router.Route;
+	var IndexRoute = Router.IndexRoute;
+	var hashHistory = Router.hashHistory;
+	var Link = Router.Link;
 	
-	var _require = __webpack_require__(1);
 	
-	var Link = _require.Link;
+	var Home = React.createClass({
+	  displayName: 'Home',
 	
 	
-	var Home = function Home() {
+	  render: function render() {
+	
 	    return React.createElement(
-	        'div',
-	        { className: 'home' },
-	        React.createElement(
-	            'h1',
-	            { className: 'title' },
-	            'Shop'
-	        )
+	      'div',
+	      { className: 'description' },
+	      'firetownuseoncebutjustrunorgavebluemaderememberhomecoldthenthroughshenumeralletter'
 	    );
-	};
+	  }
+	
+	});
 	
 	module.exports = Home;
 
@@ -25445,11 +25451,12 @@
 	
 	var Items = __webpack_require__(227);
 	var Basket = __webpack_require__(228);
+	var CheckOut = __webpack_require__(230);
 	
 	var Listing = React.createClass({
 	  displayName: 'Listing',
 	  getInitialState: function getInitialState() {
-	    return { searchQuery: '', items: [], basket: [{ description: null, price: 0, id: null }] };
+	    return { searchQuery: '', items: [], basket: [{ description: null, price: null, id: null }] };
 	  },
 	
 	
@@ -25474,9 +25481,11 @@
 	
 	  addToBasket: function addToBasket(props) {
 	    var item = [];
-	    item = this.state.basket;
-	    item.push(props);
-	    this.setState({ basket: item });
+	    this.state.item = this.state.basket;
+	    this.state.item.push(props);
+	    this.setState({ basket: this.state.item });
+	    console.log(this.state.basket);
+	    localStorage.setItem('basket', JSON.stringify(this.state.basket));
 	  },
 	
 	  render: function render() {
@@ -25502,40 +25511,46 @@
 	          ),
 	          React.createElement(
 	            'li',
-	            { className: 'active' },
-	            'About'
+	            null,
+	            React.createElement(
+	              Link,
+	              { className: 'active', to: '/home' },
+	              'About'
+	            )
 	          ),
 	          React.createElement(
 	            'li',
 	            null,
-	            'Shopping Basket'
-	          ),
-	          React.createElement(
-	            'li',
-	            null,
-	            'Contact'
+	            React.createElement(
+	              Link,
+	              { className: 'shooo', to: '/checkout' },
+	              'Shopping Basket'
+	            )
 	          )
 	        )
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'basket' },
-	        'Your cart',
-	        React.createElement(Basket, { className: 'if', basket: this.state.basket })
+	        React.createElement(Basket, { className: 'basket', basket: this.state.basket })
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'list' },
-	        React.createElement('input', { className: 'search-box', type: 'text', placeholder: 'Search...', value: this.state.searchQuery, onChange: this.doSearch }),
+	        { className: 'basket' },
 	        React.createElement(
-	          'div',
-	          { className: 'shows-container' },
-	          this.state.items.filter(function (item) {
-	            return (item.description + ' ' + item.img).toUpperCase().indexOf(_this2.state.searchQuery.toUpperCase()) >= 0;
-	          }).map(function (item) {
-	            return React.createElement(Items, _extends({}, item, { addToBasket: _this2.addToBasket }));
-	          })
+	          CheckOut,
+	          { className: 'basket', basket: this.state.basket },
+	          console.log(this.state.basket)
 	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'shows-container' },
+	        this.state.items.filter(function (item) {
+	          return (item.description + ' ' + item.img).toUpperCase().indexOf(_this2.state.searchQuery.toUpperCase()) >= 0;
+	        }).map(function (item) {
+	          return React.createElement(Items, _extends({}, item, { key: item.id, addToBasket: _this2.addToBasket }));
+	        })
 	      )
 	    );
 	  }
@@ -25730,13 +25745,40 @@
 	var React = __webpack_require__(3);
 	var Listing = __webpack_require__(224);
 	var BasketItem = __webpack_require__(229);
+	var CheckOut = __webpack_require__(230);
+	var ReactRouter = __webpack_require__(1);
+	var Router = ReactRouter.Router;
+	var Route = ReactRouter.Route;
+	var IndexRoute = ReactRouter.IndexRoute;
+	var hashHistory = ReactRouter.hashHistory;
+	var Link = ReactRouter.Link;
+	
 	
 	var Basket = React.createClass({
 	  displayName: 'Basket',
 	
 	
+	  getInitialState: function getInitialState() {
+	    return { items: [{ description: null, price: null }] };
+	  },
+	
+	  handleCheckOut: function handleCheckOut(e) {
+	    this.setState({ items: this.props.basket }, function () {
+	      this.handleState();
+	    });
+	  },
+	
+	  handleState: function handleState() {
+	    console.log(this.state.items);
+	  },
+	
+	  getTotal: function getTotal() {
+	    if (!this.props.basket) return;
+	    var result = 0;
+	    for (var i in this.props.basket) {}
+	  },
+	
 	  render: function render() {
-	    console.log(this.props.basket);
 	    if (!this.props.basket) return;
 	    var basketItem = this.props.basket.map(function (item) {
 	      return React.createElement(BasketItem, { description: item.description, key: item.id, price: item.price });
@@ -25745,7 +25787,19 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'basket' },
-	      basketItem
+	      basketItem,
+	      React.createElement('div', null),
+	      React.createElement(
+	        Link,
+	        { className: 'checkout', to: '/checkout' },
+	        React.createElement(
+	          'button',
+	          { type: 'submit', onClick: this.handleCheckOut },
+	          'Proceed to checkout'
+	        ),
+	        ' '
+	      ),
+	      React.createElement(CheckOut, { className: 'basket', items: this.state.items })
 	    );
 	  }
 	});
@@ -25767,11 +25821,11 @@
 	  render: function render() {
 	    return React.createElement(
 	      "div",
-	      { className: "description" },
+	      { className: "descr" },
+	      this.props.description,
 	      React.createElement(
 	        "h4",
-	        { className: "item" },
-	        this.props.description,
+	        { className: "it" },
 	        this.props.price
 	      )
 	    );
@@ -25780,6 +25834,41 @@
 	});
 	
 	module.exports = BasketItem;
+
+/***/ },
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(3);
+	var Router = __webpack_require__(1);
+	var Route = Router.Route;
+	var IndexRoute = Router.IndexRoute;
+	var hashHistory = Router.hashHistory;
+	var Link = Router.Link;
+	
+	
+	var CheckOut = React.createClass({
+	  displayName: 'CheckOut',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { basket: null };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var data = JSON.parse(localStorage.getItem('basket') || '{}');
+	    this.setState({ basket: data });
+	  },
+	
+	  render: function render() {
+	    return React.createElement('div', { className: 'shows-container' });
+	  }
+	
+	});
+	
+	module.exports = CheckOut;
 
 /***/ }
 /******/ ]);

@@ -1,13 +1,22 @@
 const React = require('react')
-const {Link} = require('react-router')
+const Router = require('react-router')
+const { Route, IndexRoute, hashHistory, Link} = Router
 
 
-const Home=() => (
-    <div className = "home">
-    <h1 className="title">Shop</h1>
-    
-    </div>
+var Home = React.createClass({
 
-  )
+
+  render: function(){
+   
+    return(
+      <div className="description">
+    firetownuseoncebutjustrunorgavebluemaderememberhomecoldthenthroughshenumeralletter
+      </div>
+    )
+  }
+
+
+
+})
 
 module.exports = Home

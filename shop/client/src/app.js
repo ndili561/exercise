@@ -1,11 +1,12 @@
 
-import { DefaultRoute, Link, Route, RouteHandler,Router,hashHistory,IndexRoute, browserHistory } from 'react-router';
+import { DefaultRoute, Link, Route, Router,hashHistory,IndexRoute, browserHistory } from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Main = require('./components/Main')
 const Home = require('./components/Home')
 const Listing = require('./components/Listing')
+const CheckOut  = require('./components/CheckOut')
 
 
 function run() {
@@ -14,6 +15,9 @@ function run() {
       <Route path='/' component={Main}/>
       <Route path='/listing'component={Listing}/>
       <Route path='/main' component={Main}/>
+      <Route path='/home' component={Home}/>
+      <Route path='/checkout' component={CheckOut}/>
+     
     </Router>
     ), document.getElementById('app'));
 }
